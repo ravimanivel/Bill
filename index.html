@@ -23,6 +23,9 @@
         }
         .header img {
             width: 120px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
         }
         .header .company-name {
             font-size: 28px;
@@ -95,10 +98,31 @@
         .footer .bank-details {
             font-weight: bold;
         }
+        .print-button {
+            margin: 20px auto;
+            display: block;
+            text-align: center;
+        }
+        .print-button button {
+            padding: 10px 20px;
+            background-color: #2a72b5;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .print-button button:hover {
+            background-color: #1a5c90;
+        }
     </style>
 </head>
 <body>
-    <div class="invoice-box">
+    <div class="print-button">
+        <button onclick="printInvoice()">Print Invoice</button>
+    </div>
+
+    <div class="invoice-box" id="invoice">
         <div class="header">
             <img src="logo.png" alt="Company Logo">
             <div class="company-name">COMFORT Enterprises</div>
@@ -170,5 +194,30 @@
             <div class="company-details">For COMFORT ENTERPRISES</div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+    <script>
+        function printInvoice() {
+            const { jsPDF } = window.jspdf;
+            const invoiceElement = document.getElementById('invoice');
+
+            // Create a new jsPDF instance
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: 'a4',
+            });
+
+            // Add the invoice HTML content to the PDF
+            doc.html(invoiceElement, {
+                callback: function (doc) {
+                    // Save the PDF
+                    doc.save('invoice.pdf');
+                },
+                x: 10,
+                y: 10
+            });
+        }
+    </script>
 </body>
 </html>
